@@ -102,7 +102,7 @@
                                       high = mid - 1;
                                     } else if (a[mid] < value) {
                                       low = mid + 1;
-                                    } else {  // 当取到的值等于给定的值时，需要考虑是否为第一个值
+                                    } else {  // 当取到的值等于给定的值时，需要考虑是否为最后一个值
                                       if ((mid == n - 1) || (a[mid + 1] != value)) return mid;
                                       else low = mid + 1;
                                     }
@@ -117,16 +117,38 @@
                                   int high = n - 1;
                                   while (low <= high) {
                                     int mid =  low + q   ((high - low) >> 1);
-                                    if (a[mid] > value) {
-                                      high = mid - 1;
-                                    } else if (a[mid] < value) {
+                                    if (a[mid] < value) {
                                       low = mid + 1;
-                                    } else {  // 当取到的值等于给定的值时，需要考虑是否为第一个值
-                                      if ((mid == n - 1) || (a[mid + 1] != value)) return mid;
-                                      else low = mid + 1;
+                                    } else {  // 当取值满足条件(即大于等于给定值)，那么还需要判断是否是第一个大于等于给定值的元素
+                                      if ((mid == 0) || (a[mid - 1] < value)) return mid;
+                                      else high = mid - 1;
                                     }
                                   }
                                   return -1;
-                                }                   
-            
+                                }    
+                                               
+            (4) 变形四：查找最后一个小于等于给定值的元素
+                         实现代码:
+                                 public int bsearch(int[] a, int n, int value) {
+                                   int low = 0;
+                                   int high = n - 1;
+                                   while (low <= high) {
+                                     int mid =  low + q   ((high - low) >> 1);
+                                     if (a[mid] > value) {
+                                       high = mid - 1;
+                                     } else {  // 当取值满足条件(即大于等于给定值)，那么还需要判断是否是第一个大于等于给定值的元素
+                                       if ((mid == n - 1) || (a[mid + 1] > value)) return mid;
+                                       else low = mid + 1;
+                                     }
+                                   }
+                                   return -1;
+                                 }             
+                                                      
+            (5) 变形的应用:
+                    假设我们有 12 万条这样的 IP 区间与归属地的对应关系，如何快速定位出一个 IP 地址的归属地呢？
+                    思路如下: 先预处理这 12 万条数据，将 IP 范围的中取开始 IP 从小到大排序(结束 IP 不管),而 IP 地址(字符串)
+                    　　　　　可以转化为 32 位的整型数(struct  in_addr)
+                             这样这个问题就可以转化为第四种变形问题“在有序数组中，查找最后一个小于等于某个给定值的元素”了。
+                             当我们要查询某个 IP 归属地时，我们可以先通过二分查找，找到最后一个起始 IP 小于等于这个 IP 的 IP 区间，
+                             然后，检查这个 IP 是否在这个 IP 区间内，如果在，我们就取出对应的归属地显示；如果不在，就返回未查找到。
 ```
