@@ -47,3 +47,86 @@
                     来保存已经求解过的 f(k)。当递归调用到 f(k) 时，先看下是否已经求解过了。如果是，则直接从散列表中取值返回，
                     不需要重复计算．
 ```
+
+## 二分查找(Binary Search)
+
+```
+    1. 二分查找也称为折半查找，二分查找针对的是一个有序的数据集合，查找思想有点类似分治思想。每次都通过跟区间的中间元素对比，
+    　　将待查找的区间缩小为之前的一半，直到找到要查找的元素，或者区间被缩小为 0。
+    2. 二分查找的时间复杂度 O(logn)
+            刚开始数据量为 n, 经过一次二分查找后为 n / 2, 第二次二分查找有数据量为 n / 4, 所以当找到对应的数据时需要 k 次
+             n/(2 ^ k) = 1 , k = logn,所以时间复杂度就是 O(logn)
+    3. 二分查找的局限性
+            (1) 二分查找依赖的是顺序表结构(数组)
+                    二分查找需要具备按照下标进行随机访问，链表很难实现
+            (2) 二分查找针对的是有序数据
+                    二分查找只能用在插入、删除操作不频繁，一次排序多次查找的场景中。针对动态变化的数据集合，二分查找将不再适用,因为
+                    每一次的插入，删除都要进行先排序后二分查找，其维护有序的成本高，像这种动态数据集合中快速的查找可以用二叉树.
+            (3) 二分查找的数据量不宜过大和过小．
+                    因为它的存储是顺序存储，所以过大则需内存中连续的大空间，如果过小则使用遍历也是同样的效果
+                    
+    4. 应用
+            (1) 用内存 100MB 快速查找 1000 万个整数,每个数据大小是 8 字节．用二分查找，先用数据进行数据保存而进行排序，之后再进行
+            　　　二分查找．　在这种情况下(内存受限)，不宜使用二叉树和散列表，因为这 2 中数据结构需要额外的内存
+            
+    5. 二分查找变形问题
+            (1) 变形一: 查找第一个等于给定值的元素
+                        　即在有序数据集合中存在重复的数据，找到第一个等于给定值的元素
+                        
+                        实现代码:
+                                public int bsearch(int[] a, int n, int value) {
+                                  int low = 0;
+                                  int high = n - 1;
+                                  while (low <= high) {
+                                    int mid =  low + ((high - low) >> 1);
+                                    if (a[mid] > value) {
+                                      high = mid - 1;
+                                    } else if (a[mid] < value) {
+                                      low = mid + 1;
+                                    } else {  // 当取到的值等于给定的值时，需要考虑是否为第一个值
+                                      if ((mid == 0) || (a[mid - 1] != value)) return mid;
+                                      else high = mid - 1;
+                                    }
+                                  }
+                                  return -1;
+                                }
+                                
+            (2) 变形二:查找最后一个值等于给定值的元素
+                        实现代码:
+                                public int bsearch(int[] a, int n, int value) {
+                                  int low = 0;
+                                  int high = n - 1;
+                                  while (low <= high) {
+                                    int mid =  low + ((high - low) >> 1);
+                                    if (a[mid] > value) {
+                                      high = mid - 1;
+                                    } else if (a[mid] < value) {
+                                      low = mid + 1;
+                                    } else {  // 当取到的值等于给定的值时，需要考虑是否为第一个值
+                                      if ((mid == n - 1) || (a[mid + 1] != value)) return mid;
+                                      else low = mid + 1;
+                                    }
+                                  }
+                                  return -1;
+                                }
+                                
+            (3) 变形三：查找第一个大于等于给定值的元素
+                        实现代码:
+                                public int bsearch(int[] a, int n, int value) {
+                                  int low = 0;
+                                  int high = n - 1;
+                                  while (low <= high) {
+                                    int mid =  low + q   ((high - low) >> 1);
+                                    if (a[mid] > value) {
+                                      high = mid - 1;
+                                    } else if (a[mid] < value) {
+                                      low = mid + 1;
+                                    } else {  // 当取到的值等于给定的值时，需要考虑是否为第一个值
+                                      if ((mid == n - 1) || (a[mid + 1] != value)) return mid;
+                                      else low = mid + 1;
+                                    }
+                                  }
+                                  return -1;
+                                }                   
+            
+```
