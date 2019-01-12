@@ -102,6 +102,14 @@
             
 ```
 
+## 设计散列表
+
+```shell
+    1. 设计一个合适的散列函数；
+    2. 定义装载因子阈值，并且设计动态扩容策略；
+    3. 选择合适的散列冲突解决方法
+```
+
 ## 应用
 
 ```shell
@@ -110,5 +118,33 @@
             设计可以是将单词中每个字母的 ASCll 码值“进位”相加，然后再跟散列表的大小取模，作为散列值.例如
             　hash("nice")=(("n" - "a") * 26*26*26 + ("i" - "a")*26*26 + ("c" - "a")*26+ ("e"-"a")) % hash_size
 
-
+    2. Java 中的 HashMap 散列表分析
+            (1) HashMap 默认的初始大小是 16，如果事先知道大概的数据量有多大，可以通过修改默认初始大小，减少动态扩容的次数，
+                提高 HashMap 的性能
+            (2) 装载因子和动态扩容, 最大装载因子默认是 0.75，当 HashMap 中元素个数超过 0.75 * capacity(capacity 表示散列表的容量)
+                就会启动扩容，每次扩容都会扩容为原来的两倍
+            (3) 散列冲突解决方法, HashMap 底层采用链表法来解决冲突,当冲突发送时其同一个桶的链表长度过长(默认超过 8), 
+               利用红黑树快速增删改查的特点，提高 HashMap 的性能。当红黑树结点个数少于 8 个的时候，又会将红黑树转化为链表。
+               在数据量较小的情况下，红黑树要维护平衡，比起链表来，性能上的优势并不明显。
+            (4) 散列函数
+                    hashcode 的随机性，加上移位异或算法，得到一个非常随机的hash值，再通过「除留余数法」
+                    
+                    int hash(Object key) {
+                        int h = key.hashCode()；
+                        return (h ^ (h >>> 16)) & (capitity -1); //capicity 表示散列表的大小 A % B = A & (B - 1)
+                    }
+                    
+                    public int hashCode() {
+                      int var1 = this.hash;
+                      if(var1 == 0 && this.value.length > 0) {
+                        char[] var2 = this.value;
+                        for(int var3 = 0; var3 < this.value.length; ++var3) {
+                          var1 = 31 * var1 + var2[var3];
+                        }
+                        this.hash = var1;
+                      }
+                      return var1;
+                    }
+    3. python的字典 dict 结构也是用 散列表
+                    
 ```
