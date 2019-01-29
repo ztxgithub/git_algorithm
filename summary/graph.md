@@ -130,4 +130,53 @@
                       }
                       System.out.print(t + " ");
                     }
+                    
+            (3) 复杂度分析
+                    (1) 时间复杂度 O(E) 
+                    最坏情况下，终止顶点 t 离起始顶点 s 很远，需要遍历整个图才能找到。每个顶点都要进出一遍队列，
+                    每个边也都会被访问一次，广度优先搜索的时间复杂度是 O(V+E)，V 表示顶点的个数，E 表示边的个数。
+                    对于一个连通图来说，一个图中的所有顶点都是连通的，E 要大于等于 V-1，广度优先搜索的时间复杂度也可以
+                    简写为 O(E)
+                    
+                    广度优先搜索的空间消耗主要在几个辅助变量 visited 数组、queue 队列、prev 数组上。
+                    这三个存储空间的大小都不会超过顶点的个数，所以空间复杂度是 O(V)
+                    
+    4. 深度优先搜索(DFS)
+            (1) 深度优先搜索(Depth-First-Search), 深度优先搜索找出来的路径，并不是顶点 s 到顶点 t 的最短路径。
+                深度优先搜索用的是回溯思想, 这种思想解决问题的过程，适合用递归来实现。
+            (2) 变量 found，它的作用是，当我们已经找到终止顶点 t 之后，就不再递归地继续查找。
+            (3) 
+                boolean found = false; // 全局变量或者类成员变量
+                 
+                public void dfs(int s, int t) {
+                  found = false;
+                  boolean[] visited = new boolean[v];
+                  int[] prev = new int[v];
+                  for (int i = 0; i < v; ++i) {
+                    prev[i] = -1;
+                  }
+                  recurDfs(s, t, visited, prev);
+                  print(prev, s, t);
+                }
+                 
+                private void recurDfs(int w, int t, boolean[] visited, int[] prev) {
+                  if (found == true) return;
+                  visited[w] = true;
+                  if (w == t) {
+                    found = true;
+                    return;
+                  }
+                  for (int i = 0; i < adj[w].size(); ++i) {
+                    int q = adj[w].get(i);
+                    if (!visited[q]) {
+                      prev[q] = w;
+                      recurDfs(q, t, visited, prev);
+                    }
+                  }
+                }
+            (4) 复杂度分析
+                    a. 时间复杂度 O(E), 每条边最多会被访问两次，一次是遍历，一次是回退
+                    b. 空间复杂度 O(V), 深度优先搜索算法的消耗内存主要是 visited、prev 数组和递归调用栈。
+                       visited、prev 数组的大小跟顶点的个数 V 成正比，递归调用栈的最大深度不会超过顶点的个数
+                    
 ```
